@@ -10,6 +10,7 @@ import kotlinx.coroutines.IO
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class DroneViewModel(
     val dispatcher : CoroutineDispatcher = Dispatchers.IO,
@@ -91,7 +92,11 @@ class DroneViewModel(
         }
     }
 
-    fun addDrone(drone: Drone) {
+    fun addDrone(drone: Drone, onSuccess: () -> Unit) {
+        if (drone.name.isEmpty() || drone.name.isBlank()) { // NOUVEAU: Vérification
+            errorMessage.value = "Le nom du drone ne peut pas être vide."
+            return
+        }
         runInProgress.value = true
         errorMessage.value = ""
         viewModelScope.launch(dispatcher) {
@@ -109,15 +114,24 @@ class DroneViewModel(
                     added_at = null,
                     updated_at = null
                 )
-                loadDrones() // Recharge la liste après modification
+                loadDrones()
+                withContext(Dispatchers.Main) {
+                    onSuccess()
+                }
             } catch (e: Exception) {
                 errorMessage.value = e.message ?: "Erreur inconnue"
             }finally {
-                runInProgress.value = false
+                withContext(Dispatchers.Main) { // S'assurer que le runInProgress est mis à jour sur Main
+                    runInProgress.value = false
+                }
             }
         }
     }
-    fun updateDrone(drone: Drone) {
+    fun updateDrone(drone: Drone, onSuccess: () -> Unit) {
+        if (drone.name.isEmpty() || drone.name.isBlank()) { // NOUVEAU: Vérification
+            errorMessage.value = "Le nom du drone ne peut pas être vide."
+            return
+        }
         runInProgress.value = true
         errorMessage.value = ""
         viewModelScope.launch(dispatcher) {
@@ -134,11 +148,17 @@ class DroneViewModel(
                     firmware_last_update = null,
                     updated_at = null
                 )
-                loadDrones() // Recharge la liste après modification
+                loadDrones()
+                withContext(Dispatchers.Main) {
+                    onSuccess()
+                }
             } catch (e: Exception) {
                 errorMessage.value = e.message ?: "Erreur inconnue"
             }finally {
                 runInProgress.value = false
+                withContext(Dispatchers.Main) { // S'assurer que le runInProgress est mis à jour sur Main
+                    runInProgress.value = false
+                }
             }
         }
     }

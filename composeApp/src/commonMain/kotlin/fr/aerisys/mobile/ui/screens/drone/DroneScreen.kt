@@ -90,17 +90,18 @@ fun DroneScreen(
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                if(errorMessage != ""){
-                    Text(errorMessage)
+                if(errorMessage.isNotEmpty()){
+                    Text(errorMessage, color = Color.Red)
+                    Spacer(modifier = Modifier.height(8.dp))
                 }
                 // Bouton Valider
                 MyButton(
                     text = stringResource(Res.string.validate),
                     onClick = {
                         val droneSend = drone.copy(name = name)
-                        if(isAdd){viewModel.addDrone(droneSend)}
-                        else {viewModel.updateDrone(droneSend)}
-                        onBack()},
+                        if(isAdd){viewModel.addDrone(droneSend,onBack)}
+                        else {viewModel.updateDrone(droneSend,onBack)}
+                        },
                     modifier = Modifier.fillMaxWidth()
                 )
 

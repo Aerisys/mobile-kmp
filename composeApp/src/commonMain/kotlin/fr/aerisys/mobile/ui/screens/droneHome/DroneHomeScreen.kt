@@ -42,7 +42,7 @@ fun DroneHomeScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(stringResource(Res.string.drone)) },
+                title = { Text(text = "${stringResource(Res.string.drone)} : ${drone.name}" ) },
                 navigationIcon = {
                     IconButton(onClick = { onBack() }) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(Res.string.back))
