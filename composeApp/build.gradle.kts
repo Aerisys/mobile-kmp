@@ -54,6 +54,12 @@ kotlin {
             implementation("org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose:2.9.+")
             implementation("io.coil-kt.coil3:coil-network-ktor3:3.2.0")
             implementation("io.coil-kt.coil3:coil-compose:3.2.0")
+            implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.0")
+
+
+            implementation(libs.vico.multiplatform)
+            implementation(libs.vico.multiplatform.m3)
+
         }
         iosMain.dependencies {
             implementation("app.cash.sqldelight:native-driver:2.1.0")

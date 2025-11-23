@@ -76,7 +76,7 @@ fun DroneHomeScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 when (currentRoute) {
-                    "graph" -> GraphDroneScreen()
+                    "graph" -> GraphDroneScreen(drone)
                     "3d" -> ThirdDimensionDroneScreen()
                 }
             }

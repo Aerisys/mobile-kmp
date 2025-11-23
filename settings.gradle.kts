@@ -25,6 +25,9 @@ dependencyResolutionManagement {
             }
         }
         mavenCentral()
+
+        // 🌟 AJOUTEZ CETTE LIGNE POUR VICO 🌟
+        maven { url = uri("https://jitpack.io") }
     }
 }
 
