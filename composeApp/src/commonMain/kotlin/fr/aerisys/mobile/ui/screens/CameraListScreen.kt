@@ -9,14 +9,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import fr.aerisys.mobile.ui.Routes
 import fr.aerisys.mobile.viewModel.CameraViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun CameraListScreen(
     navController: NavController,
-    viewModel: CameraViewModel,
     modifier: Modifier = Modifier
 ) {
+    val viewModel = koinViewModel<CameraViewModel>()
+
     val cameras by viewModel.camerasList.collectAsState()
     val isLoading by viewModel.runInProgress.collectAsState()
     val errorMessage by viewModel.errorMessage.collectAsState()
@@ -31,7 +34,7 @@ fun CameraListScreen(
         ) {
             if (isLoading) {
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
-            } else if (errorMessage.isNotEmpty()) {
+            } else if (errorMessage.isNotBlank()) {
                 Text(
                     text = errorMessage,
                     color = MaterialTheme.colorScheme.error
@@ -55,7 +58,7 @@ fun CameraListScreen(
                                 Spacer(modifier = Modifier.height(8.dp))
                                 Button(
                                     onClick = {
-                                        navController.navigate("camera/${camera.id}")
+                                        navController.navigate(Routes.CameraStreamRoute(camera.id))
                                     }
                                 ) {
                                     Text("View Camera Details")
@@ -63,15 +66,6 @@ fun CameraListScreen(
                             }
                         }
                     }
-                }
-
-                Button(
-                    onClick = {
-                        navController.navigate("cameraListEnd")
-                    },
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
-                ) {
-                    Text("Go to Camera Page")
                 }
             }
         }

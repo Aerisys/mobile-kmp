@@ -12,6 +12,26 @@ class CameraViewModel() : ViewModel() {
     val runInProgress = MutableStateFlow(false)
     val errorMessage = MutableStateFlow("")
 
+    fun loadTestData() {
+        camerasList.value = listOf(
+            CameraBean(
+                id = 1,
+                name = "Test Camera 1",
+                user_id = 1001,
+                ip_address = "192.168.1.61/stream",
+                mac_address = "00:1A:2B:3C:4D:6E",
+                image_format = "JPEG",
+                image_quality = "High",
+                image_dimension = "1920x1080",
+                firmware_version = "v1.0.0",
+                firmware_last_update = 1622505600
+            )
+        )
+
+        this.runInProgress.value = false
+        this.errorMessage.value = ""
+    }
+
     fun loadFakeData(runInProgress: Boolean = false, errorMessage: String = "") {
         this.runInProgress.value = runInProgress
         this.errorMessage.value = errorMessage

@@ -48,6 +48,6 @@ val viewModelModule = module {
 
     viewModelOf(::MainViewModel)
     viewModelOf(::UserViewModel)
-    viewModelOf(::CameraViewModel)
+    single { CameraViewModel() }
     viewModelOf(::CameraStreamViewModel)
 }

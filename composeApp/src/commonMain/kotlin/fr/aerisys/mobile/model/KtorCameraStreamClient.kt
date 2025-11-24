@@ -16,7 +16,7 @@ class KtorCameraStreamClient(
     val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
     fun readStream(url: String): Flow<ByteArray> = flow {
-        val httpResponse = httpClient.get(url)
+        val httpResponse = httpClient.get("http://$url")
         val channel = httpResponse.bodyAsChannel()
 
         val buffer = ByteArray(1024)

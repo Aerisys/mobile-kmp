@@ -9,6 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import fr.aerisys.mobile.ui.screens.AccountScreen
 import fr.aerisys.mobile.ui.screens.CameraDetailsScreen
+import fr.aerisys.mobile.ui.screens.CameraListScreen
 import fr.aerisys.mobile.ui.screens.CameraStreamScreen
 import fr.aerisys.mobile.ui.screens.HomeScreen
 import fr.aerisys.mobile.viewModel.CameraViewModel
@@ -18,6 +19,8 @@ import org.koin.compose.viewmodel.koinViewModel
 class Routes {
     @Serializable
     data object HomeRoute
+    @Serializable
+    data object CameraListRoute
     @Serializable
     data class CameraStreamRoute(val id: Long)
     @Serializable
@@ -31,10 +34,11 @@ fun AppNavigation(modifier: Modifier = Modifier) {
 
     val navHostController = rememberNavController()
     val cameraViewModel = koinViewModel<CameraViewModel>()
+    cameraViewModel.loadTestData()
 
     NavHost(
         navController = navHostController,
-        startDestination = Routes.HomeRoute,
+        startDestination = Routes.CameraListRoute,
         modifier = modifier
     ) {
         composable<Routes.HomeRoute> {
@@ -59,6 +63,10 @@ fun AppNavigation(modifier: Modifier = Modifier) {
             CameraStreamScreen(
                 cameraBean = cameraBean,
             )
+        }
+
+        composable<Routes.CameraListRoute> {
+            CameraListScreen(navController = navHostController)
         }
 
         composable<Routes.AccountRoute> {
