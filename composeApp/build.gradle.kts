@@ -33,6 +33,11 @@ kotlin {
             implementation(libs.androidx.activity.compose)
             implementation("io.insert-koin:koin-android:4.1.+")
             implementation("app.cash.sqldelight:android-driver:2.1.0")
+
+            implementation("com.google.maps.android:maps-compose:6.12.2")
+            implementation("com.google.maps.android:maps-compose-utils:6.12.2")
+            implementation("com.google.maps.android:maps-compose-widgets:6.12.2")
+            implementation("com.google.android.gms:play-services-maps:18.2.0")
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -55,6 +60,7 @@ kotlin {
             implementation("io.coil-kt.coil3:coil-network-ktor3:3.2.0")
             implementation("io.coil-kt.coil3:coil-compose:3.2.0")
             implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.0")
+
 
 
             implementation(libs.vico.multiplatform)
@@ -88,6 +94,7 @@ android {
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
+        manifestPlaceholders["MAPS_API_KEY"] = project.findProperty("MAPS_API_KEY") as String? ?: ""
     }
     packaging {
         resources {

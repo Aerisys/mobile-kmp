@@ -1,6 +1,7 @@
 package fr.aerisys.mobile.di
 
 import fr.aerisys.mobile.ui.viewmodel.DroneViewModel
+import fr.aerisys.mobile.viewmodel.droneHome.MapDroneViewModel
 import fr.aerisys.mobile.viewmodel.droneHome.GraphDroneHomeViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -23,10 +24,14 @@ val graphDroneHomeViewModelModule = module {
     viewModelOf(::GraphDroneHomeViewModel)
 }
 
+val droneMapViewModel = module {
+    viewModelOf(::MapDroneViewModel)
+}
+
 fun initKoin(appDeclaration: KoinAppDeclaration = {}) =
     startKoin {
         appDeclaration()
-        modules(databaseModule(), droneViewModelModule, graphDroneHomeViewModelModule)
+        modules(databaseModule(), droneViewModelModule, graphDroneHomeViewModelModule, droneMapViewModel)
     }
 
 fun initKoin() = initKoin {}
