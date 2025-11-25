@@ -9,6 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import fr.aerisys.mobile.ui.screens.CameraScreen
 import fr.aerisys.mobile.ui.screens.HomeScreen
+import fr.aerisys.mobile.ui.screens.CameraListScreen
 import fr.aerisys.mobile.viewModel.CameraViewModel
 import kotlinx.serialization.Serializable
 import org.koin.compose.viewmodel.koinViewModel
@@ -16,6 +17,9 @@ import org.koin.compose.viewmodel.koinViewModel
 class Routes {
     @Serializable
     data object HomeRoute
+
+    @Serializable
+    data object CameraListRoute
 
     @Serializable
     data class CameraRoute(val id: Long)
@@ -33,16 +37,24 @@ fun AppNavigation(modifier: Modifier = Modifier) {
         modifier = modifier
     ) {
         composable<Routes.HomeRoute> {
-            HomeScreen()
+            HomeScreen(
+                onNavigateToCameraList = {
+                    navHostController.navigate(Routes.CameraListRoute)
+                }
+            )
         }
-
         composable<Routes.CameraRoute> {
             val cameraRoute = it.toRoute<Routes.CameraRoute>()
             val cameraBean = cameraViewModel.camerasList.collectAsStateWithLifecycle()
                 .value.first { w -> w.id == cameraRoute.id }
-
             CameraScreen(
                 cameraBean = cameraBean,
+            )
+        }
+        composable<Routes.CameraListRoute> {
+            CameraListScreen(
+                navController = navHostController,
+                viewModel = cameraViewModel
             )
         }
     }
