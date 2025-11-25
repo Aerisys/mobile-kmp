@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,17 +25,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import fr.aerisys.mobile.viewModel.UserViewModel
-import fraerisysmobile.db.Users
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
-import org.koin.compose.viewmodel.koinViewModel
 
-@Preview
 @Composable
-fun AccountScreen(userViewModel: UserViewModel = koinViewModel()) {
+fun AccountScreen(userViewModel: UserViewModel) {
     var email by remember { mutableStateOf("") }
-    var emailChecked by remember { mutableStateOf(false) }
-    var user by remember { mutableStateOf<Users?>(null) }
+    val state by userViewModel.state
 
     Column(
         modifier = Modifier
@@ -55,23 +52,24 @@ fun AccountScreen(userViewModel: UserViewModel = koinViewModel()) {
         Spacer(modifier = Modifier.height(32.dp))
         TextField(
             value = email,
-            onValueChange = { email = it },
+            onValueChange = {
+                email = it
+//                userViewModel.resetState()
+            },
             label = { Text("Email") }
         )
         Button(onClick = {
-            user = userViewModel.checkEmail(email)
-            emailChecked = true
+            userViewModel.checkEmail(email)
         }) {
             Text("Vérifier l'email")
         }
-        
-        when {
-            !emailChecked -> Unit
-            user != null -> Login(email, userViewModel)
-            else -> CreateAccount(email, userViewModel)
+
+        if (state.emailChecked) {
+            when {
+                state.existingUser != null -> Login(email, userViewModel)
+                else -> CreateAccount(email, userViewModel)
+            }
         }
-
-
     }
 }
 
@@ -82,6 +80,7 @@ fun CreateAccount(email: String, userViewModel: UserViewModel) {
     var firstPassword by remember { mutableStateOf("") }
     var secondPassword by remember { mutableStateOf("") }
     var errorPasswords by remember { mutableStateOf<String?>(null) }
+    val scope = rememberCoroutineScope()
 
 
     Text("Entrer un pseudo")
@@ -114,20 +113,25 @@ fun CreateAccount(email: String, userViewModel: UserViewModel) {
 
     Button(
         onClick = {
+
             errorPasswords = when {
-                firstPassword.isEmpty() ->
-                    "Le mot de passe est vide"
-                secondPassword.isEmpty() ->
-                    "Le second mot de passe est vide"
-                firstPassword != secondPassword ->
-                    "Les mots de passe ne correspondent pas"
+                firstPassword.isEmpty() -> "Le mot de passe est vide"
+                secondPassword.isEmpty() -> "Le second mot de passe est vide"
+                firstPassword != secondPassword -> "Les mots de passe ne correspondent pas"
                 else -> null
             }
-            if (errorPasswords == null){
-            val userCreation = userViewModel.createUser(email, firstPassword, username)
-            if(userCreation != null) {
-                println("User created: ${userCreation.let { email }}")
-            }}
+
+            if (errorPasswords != null) return@Button
+
+
+            scope.launch {
+                val userCreation = userViewModel.createUser(email, firstPassword, username)
+                if (userCreation != null) {
+                    println("User created: ${userCreation.email}")
+                } else {
+                    errorPasswords = "Erreur lors de la création"
+                }
+            }
         },
     ) {
         Text("Créer son compte")
@@ -138,6 +142,7 @@ fun CreateAccount(email: String, userViewModel: UserViewModel) {
 fun Login(email: String, userViewModel: UserViewModel){
     var password by remember { mutableStateOf("") }
     var errorPassword by remember { mutableStateOf<String?>(null) }
+    val scope = rememberCoroutineScope()
 
     TextField(
         value = password,
@@ -152,17 +157,15 @@ fun Login(email: String, userViewModel: UserViewModel){
 
     Button(
         onClick = {
-            errorPassword = when {
-                password.isEmpty() ->
-                    "Le mot de passe est vide"
-                else -> null
-            }
-            if (errorPassword == null) {
+            if (password.isEmpty()) {errorPassword = "Le mot de passe est vide"; return@Button}
+
+            scope.launch {
                 val userLog = userViewModel.login(email, password)
+
                 if (userLog == null) {
-                    errorPassword = "vérifier votre mot de passe"
+                    errorPassword = "Le mot de passe est incorrect"
                 } else {
-                    println("Utilisateur connecté")
+                    println("User logged: ${userLog.email}")
                 }
             }
         },
