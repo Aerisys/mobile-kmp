@@ -1,0 +1,71 @@
+-- =====================
+-- TABLE : DRONES
+-- =====================
+CREATE TABLE drones (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL REFERENCES users(id), -- Clé étrangère
+    name TEXT NOT NULL,
+    mac_address TEXT,
+    ip_address TEXT,
+    flight_mode TEXT,
+    motor_power INTEGER,
+    altitude_limit INTEGER,
+    firmware_version TEXT,
+    firmware_last_update INTEGER,
+    added_at INTEGER,
+    updated_at INTEGER
+);
+
+-- 🔹 CREATE
+insertDrone:
+INSERT INTO drones (
+    user_id,
+    name,
+    mac_address,
+    ip_address,
+    flight_mode,
+    motor_power,
+    altitude_limit,
+    firmware_version,
+    firmware_last_update,
+    added_at,
+    updated_at
+)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+
+
+
+-- 🔹 READ
+selectAllDrones:
+SELECT * FROM drones;
+
+selectDroneById:
+SELECT * FROM drones
+WHERE id = ?;
+
+selectDronesByUserId:
+SELECT * FROM drones
+WHERE user_id = ?;
+
+-- 🔹 UPDATE
+updateDrone:
+UPDATE drones
+SET name = ?,
+    mac_address = ?,
+    ip_address = ?,
+    flight_mode = ?,
+    motor_power = ?,
+    altitude_limit = ?,
+    firmware_version = ?,
+    firmware_last_update = ?,
+    updated_at = ?
+WHERE id = ?;
+
+-- 🔹 DELETE
+deleteDroneById:
+DELETE FROM drones
+WHERE id = ?;
+
+deleteAllDrones:
+DELETE FROM drones;

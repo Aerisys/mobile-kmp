@@ -1,0 +1,60 @@
+-- =====================
+-- TABLE : CAMERAS
+-- =====================
+CREATE TABLE cameras (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL REFERENCES users(id), -- Clé étrangère
+    ip_address TEXT,
+    mac_address TEXT,
+    image_format TEXT,
+    image_quality TEXT,
+    image_dimension TEXT,
+    firmware_version TEXT,
+    firmware_last_update INTEGER
+);
+
+-- 🔹 CREATE
+insertCamera:
+INSERT INTO cameras (
+    user_id,
+    ip_address,
+    mac_address,
+    image_format,
+    image_quality,
+    image_dimension,
+    firmware_version,
+    firmware_last_update
+)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+
+-- 🔹 READ
+selectAllCameras:
+SELECT * FROM cameras;
+
+selectCameraById:
+SELECT * FROM cameras
+WHERE id = ?;
+
+selectCamerasByUserId:
+SELECT * FROM cameras
+WHERE user_id = ?;
+
+-- 🔹 UPDATE
+updateCamera:
+UPDATE cameras
+SET ip_address = ?,
+    mac_address = ?,
+    image_format = ?,
+    image_quality = ?,
+    image_dimension = ?,
+    firmware_version = ?,
+    firmware_last_update = ?
+WHERE id = ?;
+
+-- 🔹 DELETE
+deleteCameraById:
+DELETE FROM cameras
+WHERE id = ?;
+
+deleteAllCameras:
+DELETE FROM cameras;

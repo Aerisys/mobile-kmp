@@ -1,0 +1,36 @@
+-- =====================-- TABLE : USERS
+-- =====================
+CREATE TABLE users (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    username TEXT NOT NULL,
+    email TEXT NOT NULL,
+    password TEXT NOT NULL,
+    created_at TEXT
+);
+
+-- 🔹 CREATE
+insertUser:
+INSERT INTO users (username, email, password)
+VALUES (?, ?, ?);
+
+-- 🔹 READ
+selectAllUsers:
+SELECT * FROM users;
+
+selectUserById:
+SELECT * FROM users
+WHERE id = ?;
+
+-- 🔹 UPDATE
+updateUser:
+UPDATE users
+SET username = ?, email = ?, password = ?
+WHERE id = ?;
+
+-- 🔹 DELETE
+deleteUserById:
+DELETE FROM users
+WHERE id = ?;
+
+deleteAllUsers:
+DELETE FROM users;

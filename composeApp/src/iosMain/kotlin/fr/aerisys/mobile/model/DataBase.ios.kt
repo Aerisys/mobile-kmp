@@ -6,7 +6,7 @@ import org.koin.dsl.module
 
 actual fun databaseModule() = module {
     single {
-        val driver = NativeSqliteDriver(AerisysDatabase.Schema, "AerisysDatabase.db")
+        val driver = NativeSqliteDriver(AerisysDatabase.Schema, "aerisys.db")
         AerisysDatabase(driver)
     }
 }
