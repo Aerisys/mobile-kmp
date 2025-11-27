@@ -69,6 +69,7 @@ fun AppNavigation(modifier: Modifier = Modifier) {
                 .value.first { w -> w.id == cameraRoute.id }
             CameraStreamScreen(
                 cameraBean = cameraBean,
+                navHostController = navHostController
             )
         }
         composable<Routes.CameraListRoute> {
