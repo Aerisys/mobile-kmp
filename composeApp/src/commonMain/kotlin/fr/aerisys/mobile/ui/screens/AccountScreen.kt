@@ -24,12 +24,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import fr.aerisys.mobile.ui.Routes
 import fr.aerisys.mobile.viewModel.UserViewModel
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun AccountScreen(userViewModel: UserViewModel) {
+fun AccountScreen(userViewModel: UserViewModel, navController: NavHostController) {
     var email by remember { mutableStateOf("") }
     val state by userViewModel.state
 
@@ -66,8 +68,8 @@ fun AccountScreen(userViewModel: UserViewModel) {
 
         if (state.emailChecked) {
             when {
-                state.existingUser != null -> Login(email, userViewModel)
-                else -> CreateAccount(email, userViewModel)
+                state.existingUser != null -> Login(email, userViewModel, navController)
+                else -> CreateAccount(email, userViewModel, navController)
             }
         }
     }
@@ -75,7 +77,7 @@ fun AccountScreen(userViewModel: UserViewModel) {
 
 
 @Composable
-fun CreateAccount(email: String, userViewModel: UserViewModel) {
+fun CreateAccount(email: String, userViewModel: UserViewModel, navController: NavHostController) {
     var username by remember { mutableStateOf("") }
     var firstPassword by remember { mutableStateOf("") }
     var secondPassword by remember { mutableStateOf("") }
@@ -128,6 +130,9 @@ fun CreateAccount(email: String, userViewModel: UserViewModel) {
                 val userCreation = userViewModel.createUser(email, firstPassword, username)
                 if (userCreation != null) {
                     println("User created: ${userCreation.email}")
+                    navController.navigate(Routes.HomeRoute) {
+                        popUpTo(Routes.AccountRoute) { inclusive = true }
+                    }
                 } else {
                     errorPasswords = "Erreur lors de la création"
                 }
@@ -139,7 +144,7 @@ fun CreateAccount(email: String, userViewModel: UserViewModel) {
 }
 
 @Composable
-fun Login(email: String, userViewModel: UserViewModel){
+fun Login(email: String, userViewModel: UserViewModel, navController: NavHostController){
     var password by remember { mutableStateOf("") }
     var errorPassword by remember { mutableStateOf<String?>(null) }
     val scope = rememberCoroutineScope()
@@ -166,6 +171,9 @@ fun Login(email: String, userViewModel: UserViewModel){
                     errorPassword = "Le mot de passe est incorrect"
                 } else {
                     println("User logged: ${userLog.email}")
+                    navController.navigate(Routes.HomeRoute) {
+                        popUpTo(Routes.AccountRoute) { inclusive = true }
+                    }
                 }
             }
         },
