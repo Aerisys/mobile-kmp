@@ -42,7 +42,6 @@ fun AppNavigation(modifier: Modifier = Modifier) {
 
     val navHostController = rememberNavController()
     val cameraViewModel = koinViewModel<CameraViewModel>()
-    cameraViewModel.loadTestData()
 
     NavHost(
         navController = navHostController,

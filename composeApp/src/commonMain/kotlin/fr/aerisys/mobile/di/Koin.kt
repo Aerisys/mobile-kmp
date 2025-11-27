@@ -6,9 +6,6 @@ import fr.aerisys.mobile.viewModel.CameraViewModel
 import fr.aerisys.mobile.viewModel.MainViewModel
 import fr.aerisys.mobile.viewModel.UserViewModel
 import io.ktor.client.HttpClient
-import io.ktor.client.plugins.logging.LogLevel
-import io.ktor.client.plugins.logging.Logger
-import io.ktor.client.plugins.logging.Logging
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import org.koin.core.context.startKoin
@@ -20,6 +17,8 @@ import org.koin.dsl.module
 
 expect fun databaseModule(): Module
 
+expect val client: HttpClient
+
 fun initKoin(appDeclaration: KoinAppDeclaration = {}) =
     startKoin {
         appDeclaration()
@@ -28,16 +27,7 @@ fun initKoin(appDeclaration: KoinAppDeclaration = {}) =
 
 val apiModule = module {
     single {
-        HttpClient {
-            install(Logging) {
-                logger = object : Logger {
-                    override fun log(message: String) {
-                        println(message)
-                    }
-                }
-                level = LogLevel.INFO  // TRACE, HEADERS, BODY, etc.
-            }
-        }
+        client
     }
 
     singleOf(::KtorCameraStreamClient)
