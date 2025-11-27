@@ -81,7 +81,7 @@ fun AccountScreen(
                 }
 
                 Button(onClick = {
-                    navController.navigate(Routes.HomeRoute) {
+                    navController.navigate(Routes.CameraListRoute) {
                         popUpTo(Routes.AccountRoute) { inclusive = true }
                     }
                 }) {
@@ -156,7 +156,7 @@ fun CreateAccount(email: String, navController: NavHostController) {
                 val userCreation = userViewModel.createUser(email, firstPassword, username)
                 if (userCreation != null) {
                     println("User created: ${userCreation.email}")
-                    navController.navigate(Routes.HomeRoute) {
+                    navController.navigate(Routes.CameraListRoute) {
                         popUpTo(Routes.AccountRoute) { inclusive = true }
                     }
                 } else {
@@ -201,7 +201,7 @@ fun Login(email: String, navController: NavHostController) {
                     errorPassword = "Le mot de passe est incorrect"
                 } else {
                     println("User logged: ${userLog.email}")
-                    navController.navigate(Routes.HomeRoute) {
+                    navController.navigate(Routes.CameraListRoute) {
                         popUpTo(Routes.AccountRoute) { inclusive = true }
                     }
                 }

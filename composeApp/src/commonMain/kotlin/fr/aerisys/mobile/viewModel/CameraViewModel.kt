@@ -31,7 +31,7 @@ class CameraViewModel() : ViewModel() {
             ),
             CameraBean(
                 id = 2,
-                name = "Peter",
+                name = "Kitchen",
                 user_id = 102,
                 ip_address = "192.168.1.11",
                 mac_address = "00:1A:2B:3C:4D:5F",
@@ -43,7 +43,7 @@ class CameraViewModel() : ViewModel() {
             ),
             CameraBean(
                 id = 3,
-                name = "Amaury",
+                name = "Living Room",
                 user_id = 103,
                 ip_address = "192.168.1.12",
                 mac_address = "00:1A:2B:3C:4D:60",
@@ -55,7 +55,7 @@ class CameraViewModel() : ViewModel() {
             ),
             CameraBean(
                 id = 4,
-                name = "Macron",
+                name = "Grandma's House",
                 user_id = 104,
                 ip_address = "192.168.1.13",
                 mac_address = "00:1A:2B:3C:4D:61",
@@ -67,7 +67,7 @@ class CameraViewModel() : ViewModel() {
             ),
             CameraBean(
                 id = 5,
-                name = "Chirac",
+                name = "Gate cam",
                 user_id = 105,
                 ip_address = "192.168.1.14",
                 mac_address = "00:1A:2B:3C:4D:62",
@@ -80,6 +80,30 @@ class CameraViewModel() : ViewModel() {
             CameraBean(
                 id = 6,
                 name = "Lilibet",
+                user_id = 106,
+                ip_address = "192.168.1.15",
+                mac_address = "00:1A:2B:3C:4D:63",
+                image_format = "TIFF",
+                image_quality = "Ultra",
+                image_dimension = "7680x4320",
+                firmware_version = "v2.1.3",
+                firmware_last_update = 1717200000
+            ),
+            CameraBean(
+                id = 7,
+                name = "Security cam",
+                user_id = 106,
+                ip_address = "192.168.1.15",
+                mac_address = "00:1A:2B:3C:4D:63",
+                image_format = "TIFF",
+                image_quality = "Ultra",
+                image_dimension = "7680x4320",
+                firmware_version = "v2.1.3",
+                firmware_last_update = 1717200000
+            ),
+            CameraBean(
+                id = 8,
+                name = "Philibert",
                 user_id = 106,
                 ip_address = "192.168.1.15",
                 mac_address = "00:1A:2B:3C:4D:63",

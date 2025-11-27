@@ -1,8 +1,12 @@
 package fr.aerisys.mobile.ui.screens
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -10,11 +14,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowLeft
+import androidx.compose.material.icons.automirrored.filled.Forward
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowLeft
+import androidx.compose.material.icons.filled.Forward
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -45,29 +54,25 @@ fun CameraListScreen(
     val errorMessage by viewModel.errorMessage.collectAsState()
 
     Scaffold(
-        modifier = modifier,
-        topBar = {
-            TopAppBar(
-                title = {},
-                actions = {
-                    IconButton(
-                        onClick = {
-                            navController.navigate(Routes.AddCameraRoute)
-                        }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.Add,
-                            contentDescription = "Refresh",
-                        )
-                    }
+        floatingActionButton = {
+            FilledIconButton(
+                onClick = {
+                    navController.navigate(Routes.AddCameraRoute)
                 }
-            )
-        }
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Add,
+                    contentDescription = "Refresh",
+
+                )
+            }
+        },
+        modifier = modifier,
     ) { innerPadding ->
         Column(
             modifier = Modifier
                 .padding(innerPadding)
-                .padding(horizontal = 16.dp)
+                .padding(16.dp)
                 .fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
@@ -88,23 +93,33 @@ fun CameraListScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(horizontal = 8.dp)
-                        ) {
-                            Column(modifier = Modifier.padding(16.dp)) {
-                                Text(
-                                    " ${camera.name}",
-                                    style = MaterialTheme.typography.titleMedium
-                                )
-                                Text("IP: ${camera.ip_address}")
-                                Text("Format: ${camera.image_format}")
-                                Text("Quality: ${camera.image_quality}")
-                                Spacer(modifier = Modifier.height(8.dp))
-                                Button(
+                                .clickable(
                                     onClick = {
                                         navController.navigate(Routes.CameraDetailsRoute(camera.id))
                                     }
-                                ) {
-                                    Text("View Camera Details")
+                                )
+                        ) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(16.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Column {
+                                    Text(
+                                        " ${camera.name}",
+                                        style = MaterialTheme.typography.titleMedium
+                                    )
+                                    Text("IP: ${camera.ip_address}")
+                                    Text("Format: ${camera.image_format}")
+                                    Text("Quality: ${camera.image_quality}")
                                 }
+                                Icon(
+                                    modifier = Modifier.padding(horizontal = 8.dp),
+                                    imageVector = Icons.AutoMirrored.Filled.Forward,
+                                    contentDescription = "View camera details icon",
+                                )
                             }
                         }
                     }
