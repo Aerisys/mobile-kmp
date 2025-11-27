@@ -37,7 +37,11 @@ val viewModelModule = module {
     factory { Dispatchers.IO }
 
     viewModelOf(::MainViewModel)
-    viewModelOf(::UserViewModel)
-    single { CameraViewModel() }
+    single {
+        CameraViewModel()
+    }
+    single {
+        UserViewModel(get())
+    }
     viewModelOf(::CameraStreamViewModel)
 }

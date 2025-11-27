@@ -10,10 +10,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -33,30 +32,32 @@ import fr.aerisys.mobile.ui.Routes
 fun CameraDetailsScreen(
     cameraBean: CameraBean,
     navController: NavController,
+    onNavigateBack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
+        modifier = modifier,
         topBar = {
             TopAppBar(
+                title = { Text("Details: ${cameraBean.name}") },
                 navigationIcon = {
                     IconButton(
-                        onClick = { navController.popBackStack() }
+                        onClick = onNavigateBack,
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back"
                         )
                     }
-                },
-                title = { Text("Details: ${cameraBean.name}") }
+                }
             )
         }
     ) { innerPadding ->
         Column(
-            modifier = modifier
+            modifier = Modifier
                 .padding(innerPadding)
-                .fillMaxSize()
-                .padding(24.dp),
+                .padding(24.dp)
+                .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text("Camera Details", style = MaterialTheme.typography.headlineMedium)
@@ -65,7 +66,7 @@ fun CameraDetailsScreen(
 
             DetailItem(label = "IP Address", value = cameraBean.ip_address)
             DetailItem(label = "Image Format", value = cameraBean.image_format)
-            DetailItem(label = "Quality", value = cameraBean.image_quality.toString())
+            DetailItem(label = "Quality", value = cameraBean.image_quality)
 
             Spacer(modifier = Modifier.height(48.dp))
 
@@ -92,5 +93,5 @@ private fun DetailItem(label: String, value: String) {
         Text(label, style = MaterialTheme.typography.titleMedium)
         Text(value, style = MaterialTheme.typography.bodyLarge)
     }
-    Divider()
+    HorizontalDivider()
 }

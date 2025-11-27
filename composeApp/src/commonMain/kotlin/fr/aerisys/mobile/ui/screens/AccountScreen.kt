@@ -31,13 +31,14 @@ import fr.aerisys.mobile.ui.Routes
 import fr.aerisys.mobile.viewModel.UserViewModel
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun AccountScreen(
     modifier: Modifier = Modifier,
-    userViewModel: UserViewModel,
     navController: NavHostController
 ) {
+    val userViewModel = koinViewModel<UserViewModel>()
     var email by remember { mutableStateOf("") }
     val state by userViewModel.state
 
@@ -91,8 +92,8 @@ fun AccountScreen(
 
             if (state.emailChecked) {
                 when {
-                    state.existingUser != null -> Login(email, userViewModel, navController)
-                    else -> CreateAccount(email, userViewModel, navController)
+                    state.existingUser != null -> Login(email, navController)
+                    else -> CreateAccount(email,  navController)
                 }
             }
         }
@@ -101,7 +102,8 @@ fun AccountScreen(
 
 
 @Composable
-fun CreateAccount(email: String, userViewModel: UserViewModel, navController: NavHostController) {
+fun CreateAccount(email: String, navController: NavHostController) {
+    val userViewModel = koinViewModel<UserViewModel>()
     var username by remember { mutableStateOf("") }
     var firstPassword by remember { mutableStateOf("") }
     var secondPassword by remember { mutableStateOf("") }
@@ -168,7 +170,9 @@ fun CreateAccount(email: String, userViewModel: UserViewModel, navController: Na
 }
 
 @Composable
-fun Login(email: String, userViewModel: UserViewModel, navController: NavHostController) {
+fun Login(email: String, navController: NavHostController) {
+    val userViewModel = koinViewModel<UserViewModel>()
+
     var password by remember { mutableStateOf("") }
     var errorPassword by remember { mutableStateOf<String?>(null) }
     val scope = rememberCoroutineScope()

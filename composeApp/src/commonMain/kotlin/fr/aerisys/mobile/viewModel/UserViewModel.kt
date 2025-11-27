@@ -27,10 +27,6 @@ class UserViewModel(
         )
     }
 
-    fun resetState() {
-        _state.value = AccountState()
-    }
-
     fun createUser(email: String, password : String, username : String) : Users? {
         val userQueries = database.usersQueries
         val hashedPassword = Hashing.hashPassword(password)
