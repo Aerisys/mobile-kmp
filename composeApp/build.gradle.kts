@@ -1,4 +1,6 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.io.FileInputStream
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -84,6 +86,20 @@ sqldelight {
     }
 }
 
+val mapsApiKey: String = run {
+    // 1. Définir le chemin vers le fichier secret
+    val secretPropsFile = rootProject.file("local.properties")
+    val props = Properties()
+
+    if (secretPropsFile.exists()) {
+        // 2. Charger le contenu du fichier
+        props.load(FileInputStream(secretPropsFile))
+    }
+
+    // 3. Récupérer la clé ou utiliser une chaîne vide si elle n'est pas trouvée
+    (props["MAPS_API_KEY"] as? String) ?: ""
+}
+
 android {
     namespace = "fr.aerisys.mobile"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
@@ -94,7 +110,7 @@ android {
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
-        manifestPlaceholders["MAPS_API_KEY"] = project.findProperty("MAPS_API_KEY") as String? ?: ""
+        manifestPlaceholders["MAPS_API_KEY"] = mapsApiKey
     }
     packaging {
         resources {
