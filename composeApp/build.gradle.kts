@@ -57,11 +57,12 @@ kotlin {
             implementation("org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose:2.9.+")
             implementation("io.coil-kt.coil3:coil-network-ktor3:3.2.0")
             implementation("io.coil-kt.coil3:coil-compose:3.2.0")
-            // Ktor (call api / http client)
+            // Ktor Client
             implementation("io.ktor:ktor-client-core:3.2.2")
             implementation("io.ktor:ktor-client-content-negotiation:3.2.2")
             implementation("io.ktor:ktor-serialization-kotlinx-json:3.2.2")
             implementation("io.ktor:ktor-client-logging:3.2.2")
+            implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
         }
         iosMain.dependencies {
             implementation("app.cash.sqldelight:native-driver:2.1.0")

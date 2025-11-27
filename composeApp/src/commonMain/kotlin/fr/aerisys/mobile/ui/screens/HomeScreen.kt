@@ -15,9 +15,9 @@ fun HomeScreen(
     onNavigateToCameraList: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Scaffold { innerPadding ->
+    Scaffold(modifier = modifier) { innerPadding ->
         Column(
-            modifier = modifier
+            modifier = Modifier
                 .padding(innerPadding)
                 .padding(16.dp)
                 .fillMaxSize(),

@@ -3,17 +3,17 @@
 CREATE TABLE users (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     username TEXT NOT NULL,
-    email TEXT NOT NULL,
+    email TEXT NOT NULL UNIQUE,
     password TEXT NOT NULL,
     created_at TEXT
 );
 
--- 🔹 CREATE
+--  CREATE
 insertUser:
 INSERT INTO users (username, email, password)
 VALUES (?, ?, ?);
 
--- 🔹 READ
+-- READ
 selectAllUsers:
 SELECT * FROM users;
 
@@ -21,13 +21,22 @@ selectUserById:
 SELECT * FROM users
 WHERE id = ?;
 
--- 🔹 UPDATE
+selectUserByEmail:
+SELECT * FROM users
+WHERE email = ?;
+
+loginUserByEmailAndPassword:
+SELECT * FROM users
+WHERE email = ?
+AND password = ?;
+
+--  UPDATE
 updateUser:
 UPDATE users
 SET username = ?, email = ?, password = ?
 WHERE id = ?;
 
--- 🔹 DELETE
+--  DELETE
 deleteUserById:
 DELETE FROM users
 WHERE id = ?;

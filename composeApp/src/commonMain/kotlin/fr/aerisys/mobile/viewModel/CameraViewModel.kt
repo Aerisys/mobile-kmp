@@ -3,14 +3,11 @@ package fr.aerisys.mobile.viewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import fr.aerisys.mobile.model.CameraBean
-import fr.aerisys.mobile.model.KtorCameraClient
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
-class CameraViewModel(
-    val cameraClient: KtorCameraClient,
-) : ViewModel() {
+class CameraViewModel() : ViewModel() {
     val camerasList = MutableStateFlow(emptyList<CameraBean>())
     val runInProgress = MutableStateFlow(false)
     val errorMessage = MutableStateFlow("")

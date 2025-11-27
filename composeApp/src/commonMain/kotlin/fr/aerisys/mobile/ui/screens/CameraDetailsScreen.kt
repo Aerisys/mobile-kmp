@@ -7,17 +7,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import fr.aerisys.mobile.model.CameraBean
 
-/**
- * A screen that
- */
 @Composable
-fun CameraScreen(
+fun CameraDetailsScreen(
     modifier: Modifier = Modifier,
     cameraBean: CameraBean,
 ) {
-    Scaffold { innerPadding ->
+    Scaffold(modifier = modifier) { innerPadding ->
         Column(
-            modifier = modifier
+            modifier = Modifier
                 .padding(innerPadding)
         ) {}
     }
