@@ -10,6 +10,7 @@ import androidx.navigation.toRoute
 import fr.aerisys.mobile.ui.screens.AccountScreen
 import fr.aerisys.mobile.ui.screens.CameraDetailsScreen
 import fr.aerisys.mobile.ui.screens.CameraListScreen
+import fr.aerisys.mobile.ui.screens.CameraEndScreen
 import fr.aerisys.mobile.ui.screens.CameraStreamScreen
 import fr.aerisys.mobile.ui.screens.HomeScreen
 import fr.aerisys.mobile.viewModel.CameraViewModel
@@ -19,14 +20,21 @@ import org.koin.compose.viewmodel.koinViewModel
 class Routes {
     @Serializable
     data object HomeRoute
+
     @Serializable
     data object CameraListRoute
+
+    @Serializable
+    data object CameraEndRoute
+
     @Serializable
     data class CameraStreamRoute(val id: Long)
+
     @Serializable
     data class CameraDetailsRoute(val id: Long)
+
     @Serializable
-    data class AccountRoute(val id: Long)
+    data object AccountRoute
 }
 
 @Composable
@@ -38,39 +46,50 @@ fun AppNavigation(modifier: Modifier = Modifier) {
 
     NavHost(
         navController = navHostController,
-        startDestination = Routes.CameraListRoute,
+        startDestination = Routes.AccountRoute,
         modifier = modifier
     ) {
         composable<Routes.HomeRoute> {
-            HomeScreen()
+            HomeScreen(
+                onNavigateToCameraList = {
+                    navHostController.navigate(Routes.CameraListRoute)
+                }
+            )
         }
-
+        composable<Routes.AccountRoute> {
+            AccountScreen(userViewModel = koinViewModel(), navController = navHostController)
+        }
         composable<Routes.CameraDetailsRoute> {
             val cameraRoute = it.toRoute<Routes.CameraDetailsRoute>()
             val cameraBean = cameraViewModel.camerasList.collectAsStateWithLifecycle()
                 .value.first { w -> w.id == cameraRoute.id }
-
             CameraDetailsScreen(
                 cameraBean = cameraBean,
+                navController = navHostController,
             )
         }
-
         composable<Routes.CameraStreamRoute> {
             val cameraRoute = it.toRoute<Routes.CameraStreamRoute>()
             val cameraBean = cameraViewModel.camerasList.collectAsStateWithLifecycle()
                 .value.first { w -> w.id == cameraRoute.id }
-
             CameraStreamScreen(
                 cameraBean = cameraBean,
             )
         }
-
-        composable<Routes.CameraListRoute> {
-            CameraListScreen(navController = navHostController)
+        composable<Routes.CameraEndRoute> {
+            CameraEndScreen(
+                onNavigateBack = {
+                    navHostController.popBackStack()
+                }
+            )
         }
-
-        composable<Routes.AccountRoute> {
-            AccountScreen()
+        composable<Routes.CameraListRoute> {
+            CameraListScreen(
+                navController = navHostController,
+                onNavigateBack = {
+                    navHostController.navigate(Routes.CameraEndRoute)
+                }
+            )
         }
     }
 }

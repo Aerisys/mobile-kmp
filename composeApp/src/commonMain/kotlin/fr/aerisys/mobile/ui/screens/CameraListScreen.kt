@@ -15,6 +15,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun CameraListScreen(
+    onNavigateBack: () -> Unit,
     navController: NavController,
     modifier: Modifier = Modifier
 ) {
@@ -51,14 +52,14 @@ fun CameraListScreen(
                                 .padding(horizontal = 8.dp)
                         ) {
                             Column(modifier = Modifier.padding(16.dp)) {
-                                Text("📸 ${camera.name}", style = MaterialTheme.typography.titleMedium)
+                                Text(" ${camera.name}", style = MaterialTheme.typography.titleMedium)
                                 Text("IP: ${camera.ip_address}")
                                 Text("Format: ${camera.image_format}")
                                 Text("Quality: ${camera.image_quality}")
                                 Spacer(modifier = Modifier.height(8.dp))
                                 Button(
                                     onClick = {
-                                        navController.navigate(Routes.CameraStreamRoute(camera.id))
+                                        navController.navigate(Routes.CameraDetailsRoute(camera.id))
                                     }
                                 ) {
                                     Text("View Camera Details")
@@ -67,7 +68,15 @@ fun CameraListScreen(
                         }
                     }
                 }
+                Button(
+                    onClick = onNavigateBack,
+                    modifier = Modifier.fillMaxWidth(0.8f)
+                ) {
+                    Text("Go to end screen")
+                }
+                Spacer(modifier = Modifier.height(8.dp))
+                }
             }
         }
     }
-}
+
