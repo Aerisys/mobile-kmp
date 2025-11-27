@@ -66,6 +66,14 @@ fun AccountScreen(userViewModel: UserViewModel, navController: NavHostController
             Text("Vérifier l'email")
         }
 
+        Button(onClick = {
+            navController.navigate(Routes.HomeRoute) {
+                popUpTo(Routes.AccountRoute) { inclusive = true }
+            }
+        }) {
+            Text("Passer")
+        }
+
         if (state.emailChecked) {
             when {
                 state.existingUser != null -> Login(email, userViewModel, navController)
