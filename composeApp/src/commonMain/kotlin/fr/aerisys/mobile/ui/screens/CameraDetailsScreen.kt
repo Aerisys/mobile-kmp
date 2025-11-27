@@ -1,13 +1,15 @@
 package fr.aerisys.mobile.ui.screens
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import fr.aerisys.mobile.model.CameraBean // Ensure this import is correct
+import fr.aerisys.mobile.model.CameraBean
 import fr.aerisys.mobile.ui.Routes
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -15,11 +17,25 @@ import fr.aerisys.mobile.ui.Routes
 fun CameraDetailsScreen(
     cameraBean: CameraBean,
     navController: NavController,
+    onNavigateBack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("Details: ${cameraBean.name}") })
+            TopAppBar(
+                title = { Text("Details: ${cameraBean.name}") },
+                navigationIcon = {
+                    IconButton(
+                        onClick = onNavigateBack,
+                        modifier = Modifier.padding(start = 8.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = "Back"
+                        )
+                    }
+                }
+            )
         }
     ) { innerPadding ->
         Column(

@@ -96,6 +96,12 @@ class CameraViewModel() : ViewModel() {
         loadFakeData(runInProgress = false)
     }
 
+    fun addCamera(newCamera: CameraBean) {
+        val currentList = camerasList.value.toMutableList()
+        currentList.add(newCamera)
+        camerasList.value = currentList
+    }
+
     open fun CameraListLoad(name: String = ""): Job = viewModelScope.launch {
         runInProgress.value = true
         errorMessage.value = ""

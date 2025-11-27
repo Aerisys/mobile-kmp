@@ -67,8 +67,18 @@ fun CameraListScreen(
                     }
                 }
                 Button(
+                    onClick = {
+                        navController.navigate(Routes.AddCameraRoute)
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Add New Camera")
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+                Button(
                     onClick = onNavigateBack,
-                    modifier = Modifier.fillMaxWidth(0.8f)
+                    modifier = Modifier.fillMaxWidth()
                 ) {
                     Text("Go to end screen")
                 }
