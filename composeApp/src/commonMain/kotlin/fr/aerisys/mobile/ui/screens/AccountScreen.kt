@@ -56,7 +56,6 @@ fun AccountScreen(userViewModel: UserViewModel, navController: NavHostController
             value = email,
             onValueChange = {
                 email = it
-//                userViewModel.resetState()
             },
             label = { Text("Email") }
         )
@@ -152,14 +151,14 @@ fun CreateAccount(email: String, userViewModel: UserViewModel, navController: Na
 }
 
 @Composable
-fun Login(email: String, userViewModel: UserViewModel, navController: NavHostController){
+fun Login(email: String, userViewModel: UserViewModel, navController: NavHostController) {
     var password by remember { mutableStateOf("") }
     var errorPassword by remember { mutableStateOf<String?>(null) }
     val scope = rememberCoroutineScope()
 
     TextField(
         value = password,
-        onValueChange = { password = it; errorPassword = null},
+        onValueChange = { password = it; errorPassword = null },
         label = { Text("Mot de passe") },
         visualTransformation = androidx.compose.ui.text.input.PasswordVisualTransformation(),
     )
@@ -170,7 +169,9 @@ fun Login(email: String, userViewModel: UserViewModel, navController: NavHostCon
 
     Button(
         onClick = {
-            if (password.isEmpty()) {errorPassword = "Le mot de passe est vide"; return@Button}
+            if (password.isEmpty()) {
+                errorPassword = "Le mot de passe est vide"; return@Button
+            }
 
             scope.launch {
                 val userLog = userViewModel.login(email, password)
