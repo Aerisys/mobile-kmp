@@ -9,7 +9,6 @@ actual fun PlatformMap(
     modifier: Modifier,
     positionDrone: Coordonnees,
     positionHome: Coordonnees,
-    positionPilote: Coordonnees,
     trajectoire: List<Coordonnees>,
     cameraCoordonnees: Coordonnees
 ) {

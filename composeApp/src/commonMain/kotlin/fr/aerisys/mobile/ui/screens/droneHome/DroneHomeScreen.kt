@@ -77,7 +77,7 @@ fun DroneHomeScreen(
             ) {
                 when (currentRoute) {
                     "graph" -> GraphDroneScreen(drone)
-                    "3d" -> MapDroneScreen()
+                    "map" -> MapDroneScreen()
                 }
             }
         }

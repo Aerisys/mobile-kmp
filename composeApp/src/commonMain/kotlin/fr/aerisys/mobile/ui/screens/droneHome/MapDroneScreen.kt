@@ -27,8 +27,6 @@ fun MapDroneScreen(
         positionDrone = uiState.positionDrone,
         positionHome = uiState.positionHome,
         // C'est maintenant la liste qui s'allonge dans le ViewModel
-        trajectoire = uiState.trajectoire,
-        positionPilote = uiState.positionPilote,
-        cameraCoordonnees = uiState.cameraCoordonnees
+        trajectoire = uiState.trajectoire
     )
 }

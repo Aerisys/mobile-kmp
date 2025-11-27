@@ -11,14 +11,12 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch // 🚨 NOUVEL IMPORT OBLIGATOIRE
 import kotlin.random.Random // Pour la simulation de mouvement
 
-val posLatYnov = 45.750075212537915
-val posLongYnov = 4.82318762956455
+val posLatYnov = 46.32393815381968
+val posLongYnov = 5.0081885705627505
 data class MapUIState(
     val positionDrone: Coordonnees = Coordonnees(posLatYnov, posLongYnov), // Position de départ simulée
     val positionHome: Coordonnees = Coordonnees(posLatYnov, posLongYnov),
-    val positionPilote: Coordonnees = Coordonnees(45.74981889672619, 4.823077452629531),
     val trajectoire: List<Coordonnees> = emptyList(),
-    val cameraCoordonnees: Coordonnees = Coordonnees(posLatYnov, posLongYnov)
 )
 
 class MapDroneViewModel(): ViewModel() {
@@ -63,10 +61,7 @@ class MapDroneViewModel(): ViewModel() {
         _state.update { currentState ->
             currentState.copy(
                 positionDrone = newCoord,
-                // AJOUTER LA NOUVELLE COORDONNÉE À L'HISTORIQUE :
-                trajectoire = currentState.trajectoire + newCoord,
-                // Suivre le drone avec la caméra (optionnel)
-                cameraCoordonnees = newCoord
+                trajectoire = currentState.trajectoire + newCoord
             )
         }
     }

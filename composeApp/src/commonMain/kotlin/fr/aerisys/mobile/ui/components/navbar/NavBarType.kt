@@ -4,9 +4,10 @@ import aerisys.composeapp.generated.resources.Res
 import aerisys.composeapp.generated.resources.controller
 import aerisys.composeapp.generated.resources.drone
 import aerisys.composeapp.generated.resources.graph
-import aerisys.composeapp.generated.resources.third_dimension
+import aerisys.composeapp.generated.resources.map
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SettingsRemote
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -36,6 +37,6 @@ val navBarItemsByType = mapOf(
     ),
     NavBarType.DRONE to listOf(
         NavBarItem(NavBarIcon.Vector(Icons.Default.Settings), Res.string.graph, "graph"),
-        NavBarItem(NavBarIcon.Vector(Icons.Default.Info), Res.string.third_dimension, "3d")
+        NavBarItem(NavBarIcon.Vector(Icons.Default.Map), Res.string.map, "map")
     )
 )

@@ -40,6 +40,10 @@ kotlin {
             implementation("com.google.maps.android:maps-compose-utils:6.12.2")
             implementation("com.google.maps.android:maps-compose-widgets:6.12.2")
             implementation("com.google.android.gms:play-services-maps:18.2.0")
+
+            implementation("com.google.accompanist:accompanist-permissions:0.34.0")
+            implementation("com.google.android.gms:play-services-location:21.0.1")
+            implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.8.0")
         }
         commonMain.dependencies {
             implementation(compose.runtime)
