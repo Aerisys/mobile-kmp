@@ -13,6 +13,7 @@ import fr.aerisys.mobile.viewModel.CameraViewModel
 
 @Composable
 fun CameraListScreen(
+    onNavigateBack: () -> Unit,
     navController: NavController,
     viewModel: CameraViewModel,
     modifier: Modifier = Modifier
@@ -65,14 +66,14 @@ fun CameraListScreen(
                     }
                 }
                 Button(
-                    onClick = {
-                        navController.navigate("cameraListEnd")
-                    },
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                    onClick = onNavigateBack,
+                    modifier = Modifier.fillMaxWidth(0.8f)
                 ) {
-                    Text("Go to Camera Page")
+                    Text("Go to end screen")
+                }
+                Spacer(modifier = Modifier.height(8.dp))
                 }
             }
         }
     }
-}
+

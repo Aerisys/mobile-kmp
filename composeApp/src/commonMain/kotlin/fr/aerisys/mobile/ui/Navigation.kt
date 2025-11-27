@@ -10,6 +10,7 @@ import androidx.navigation.toRoute
 import fr.aerisys.mobile.ui.screens.AccountScreen
 import fr.aerisys.mobile.ui.screens.CameraDetailsScreen
 import fr.aerisys.mobile.ui.screens.CameraListScreen
+import fr.aerisys.mobile.ui.screens.CameraEndScreen
 import fr.aerisys.mobile.ui.screens.CameraStreamScreen
 import fr.aerisys.mobile.ui.screens.HomeScreen
 import fr.aerisys.mobile.viewModel.CameraViewModel
@@ -22,6 +23,9 @@ class Routes {
 
     @Serializable
     data object CameraListRoute
+
+    @Serializable
+    data object CameraEndRoute
 
     @Serializable
     data class CameraStreamRoute(val id: Long)
@@ -70,10 +74,20 @@ fun AppNavigation(modifier: Modifier = Modifier) {
                 cameraBean = cameraBean,
             )
         }
+        composable<Routes.CameraEndRoute> {
+            CameraEndScreen(
+                onNavigateBack = {
+                    navHostController.popBackStack()
+                }
+            )
+        }
         composable<Routes.CameraListRoute> {
             CameraListScreen(
                 navController = navHostController,
-                viewModel = cameraViewModel
+                viewModel = cameraViewModel,
+                onNavigateBack = {
+                    navHostController.navigate(Routes.CameraEndRoute)
+                }
             )
         }
     }
