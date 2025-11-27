@@ -1,16 +1,18 @@
 package fr.aerisys.mobile.ui.screens
 
 import aerisys.composeapp.generated.resources.Res
-import aerisys.composeapp.generated.resources.icon_skylab_light_old_logo
+import aerisys.composeapp.generated.resources.icon_skylab_light_logo
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -22,8 +24,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import fr.aerisys.mobile.ui.Routes
 import fr.aerisys.mobile.viewModel.UserViewModel
@@ -31,52 +33,67 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun AccountScreen(userViewModel: UserViewModel, navController: NavHostController) {
+fun AccountScreen(
+    modifier: Modifier = Modifier,
+    userViewModel: UserViewModel,
+    navController: NavHostController
+) {
     var email by remember { mutableStateOf("") }
     val state by userViewModel.state
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Black)
-            .padding()
-            .padding(top = 50.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Column {
-            Image(
-                painter = painterResource(Res.drawable.icon_skylab_light_old_logo),
-                contentDescription = "Logo Aerisys",
-            )
-            Text("Aerisys", fontSize = 30.sp, color = Color.White)
-        }
-        Spacer(modifier = Modifier.height(32.dp))
-        TextField(
-            value = email,
-            onValueChange = {
-                email = it
-            },
-            label = { Text("Email") }
-        )
-        Button(onClick = {
-            userViewModel.checkEmail(email)
-        }) {
-            Text("Vérifier l'email")
-        }
-
-        Button(onClick = {
-            navController.navigate(Routes.HomeRoute) {
-                popUpTo(Routes.AccountRoute) { inclusive = true }
+    Scaffold(modifier = modifier) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .padding(top = 50.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Column {
+                Image(
+                    painter = painterResource(Res.drawable.icon_skylab_light_logo),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 100.dp),
+                    colorFilter = ColorFilter.tint(Color(0xFFFEFEFE)),
+                    contentDescription = "Logo Aerisys",
+                )
             }
-        }) {
-            Text("Passer")
-        }
+            Spacer(modifier = Modifier.height(32.dp))
+            TextField(
+                value = email,
+                onValueChange = {
+                    email = it
+                },
+                label = { Text("Email") }
+            )
+            Spacer(modifier = Modifier.height(20.dp))
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
 
-        if (state.emailChecked) {
-            when {
-                state.existingUser != null -> Login(email, userViewModel, navController)
-                else -> CreateAccount(email, userViewModel, navController)
+                ) {
+                Button(onClick = {
+                    userViewModel.checkEmail(email)
+                }) {
+                    Text("Vérifier l'email")
+                }
+
+                Button(onClick = {
+                    navController.navigate(Routes.HomeRoute) {
+                        popUpTo(Routes.AccountRoute) { inclusive = true }
+                    }
+                }) {
+                    Text("Passer")
+                }
+            }
+
+
+            if (state.emailChecked) {
+                when {
+                    state.existingUser != null -> Login(email, userViewModel, navController)
+                    else -> CreateAccount(email, userViewModel, navController)
+                }
             }
         }
     }
