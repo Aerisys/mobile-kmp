@@ -9,6 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import fr.aerisys.mobile.ui.Routes
 import fr.aerisys.mobile.viewModel.CameraViewModel
 
 @Composable
@@ -56,7 +57,7 @@ fun CameraListScreen(
                                 Spacer(modifier = Modifier.height(8.dp))
                                 Button(
                                     onClick = {
-                                        navController.navigate("camera/${camera.id}")
+                                        navController.navigate(Routes.CameraDetailsRoute(camera.id))
                                     }
                                 ) {
                                     Text("View Camera Details")
