@@ -9,10 +9,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import fr.aerisys.mobile.ui.Routes
 import fr.aerisys.mobile.viewModel.CameraViewModel
 
 @Composable
 fun CameraListScreen(
+    onNavigateBack: () -> Unit,
     navController: NavController,
     viewModel: CameraViewModel,
     modifier: Modifier = Modifier
@@ -55,7 +57,7 @@ fun CameraListScreen(
                                 Spacer(modifier = Modifier.height(8.dp))
                                 Button(
                                     onClick = {
-                                        navController.navigate("camera/${camera.id}")
+                                        navController.navigate(Routes.CameraDetailsRoute(camera.id))
                                     }
                                 ) {
                                     Text("View Camera Details")
@@ -65,14 +67,14 @@ fun CameraListScreen(
                     }
                 }
                 Button(
-                    onClick = {
-                        navController.navigate("cameraListEnd")
-                    },
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                    onClick = onNavigateBack,
+                    modifier = Modifier.fillMaxWidth(0.8f)
                 ) {
-                    Text("Go to Camera Page")
+                    Text("Go to end screen")
+                }
+                Spacer(modifier = Modifier.height(8.dp))
                 }
             }
         }
     }
-}
+
