@@ -1,9 +1,7 @@
 package fr.aerisys.mobile.ui.screens
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -14,6 +12,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun HomeScreen(
+    onNavigateToCameraList: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(modifier = modifier) { innerPadding ->
@@ -21,15 +20,32 @@ fun HomeScreen(
             modifier = Modifier
                 .padding(innerPadding)
                 .padding(16.dp)
-                .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .padding(16.dp)
             ) {
-                Row {
-                    Text("text")
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(24.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text("Welcome to the Drone Manager App")
+                    Spacer(modifier = Modifier.height(24.dp))
+
+                    Button(
+                        onClick = onNavigateToCameraList,
+                        modifier = Modifier.fillMaxWidth(0.8f)
+                    ) {
+                        Text("View Drones/Cameras")
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+
                 }
             }
         }

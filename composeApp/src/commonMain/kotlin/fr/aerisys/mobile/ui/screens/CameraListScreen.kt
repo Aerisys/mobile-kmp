@@ -48,7 +48,7 @@ fun CameraListScreen(
                                 .padding(horizontal = 8.dp)
                         ) {
                             Column(modifier = Modifier.padding(16.dp)) {
-                                Text("📸 ${camera.name}", style = MaterialTheme.typography.titleMedium)
+                                Text(" ${camera.name}", style = MaterialTheme.typography.titleMedium)
                                 Text("IP: ${camera.ip_address}")
                                 Text("Format: ${camera.image_format}")
                                 Text("Quality: ${camera.image_quality}")
@@ -64,7 +64,6 @@ fun CameraListScreen(
                         }
                     }
                 }
-
                 Button(
                     onClick = {
                         navController.navigate("cameraListEnd")

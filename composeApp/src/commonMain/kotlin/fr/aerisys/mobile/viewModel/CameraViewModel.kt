@@ -92,7 +92,11 @@ class CameraViewModel() : ViewModel() {
         )
     }
 
-    fun CameraListLoad(name: String = ""): Job = viewModelScope.launch {
+    init {
+        loadFakeData(runInProgress = false)
+    }
+
+    open fun CameraListLoad(name: String = ""): Job = viewModelScope.launch {
         runInProgress.value = true
         errorMessage.value = ""
 

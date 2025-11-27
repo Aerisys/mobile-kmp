@@ -11,6 +11,7 @@ import fr.aerisys.mobile.ui.screens.AccountScreen
 import fr.aerisys.mobile.ui.screens.CameraDetailsScreen
 import fr.aerisys.mobile.ui.screens.CameraStreamScreen
 import fr.aerisys.mobile.ui.screens.HomeScreen
+import fr.aerisys.mobile.ui.screens.CameraListScreen
 import fr.aerisys.mobile.viewModel.CameraViewModel
 import kotlinx.serialization.Serializable
 import org.koin.compose.viewmodel.koinViewModel
@@ -38,31 +39,25 @@ fun AppNavigation(modifier: Modifier = Modifier) {
         modifier = modifier
     ) {
         composable<Routes.HomeRoute> {
-            HomeScreen()
+            HomeScreen(
+                onNavigateToCameraList = {
+                    navHostController.navigate(Routes.CameraListRoute)
+                }
+            )
         }
-
-        composable<Routes.CameraDetailsRoute> {
-            val cameraRoute = it.toRoute<Routes.CameraDetailsRoute>()
+        composable<Routes.CameraRoute> {
+            val cameraRoute = it.toRoute<Routes.CameraRoute>()
             val cameraBean = cameraViewModel.camerasList.collectAsStateWithLifecycle()
                 .value.first { w -> w.id == cameraRoute.id }
-
-            CameraDetailsScreen(
+            CameraScreen(
                 cameraBean = cameraBean,
             )
         }
-
-        composable<Routes.CameraStreamRoute> {
-            val cameraRoute = it.toRoute<Routes.CameraStreamRoute>()
-            val cameraBean = cameraViewModel.camerasList.collectAsStateWithLifecycle()
-                .value.first { w -> w.id == cameraRoute.id }
-
-            CameraStreamScreen(
-                cameraBean = cameraBean,
+        composable<Routes.CameraListRoute> {
+            CameraListScreen(
+                navController = navHostController,
+                viewModel = cameraViewModel
             )
-        }
-
-        composable<Routes.AccountRoute> {
-            AccountScreen()
         }
     }
 }
