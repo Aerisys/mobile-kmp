@@ -27,14 +27,18 @@ class CameraStreamViewModel(
     suspend fun startStream(ipAddress: String) {
         println("MJPEG: startStream called with ipAddress=$ipAddress")
         viewModelScope.launch {
-            reader.readStream(ipAddress).collect { img ->
-                _frame.value = img
+            try {
+                reader.readStream(ipAddress).collect { img ->
+                    _frame.value = img
+                }
+            } catch (it: Exception) {
+                _error.value = "Erreur lors de la lecture du flux: ${it.message}"
             }
         }
 
-        delay(10000)
-        if (_frame.value == null) {
-            _error.value = "Pas de flux reçu après 10 secondes"
+        delay(15000)
+        if (_frame.value == null && _error.value == null) {
+            _error.value = "Pas de flux reçu après 15 secondes"
         }
     }
 }
