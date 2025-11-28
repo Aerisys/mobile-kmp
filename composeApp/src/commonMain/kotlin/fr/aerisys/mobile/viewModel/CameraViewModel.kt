@@ -6,12 +6,16 @@ import fr.aerisys.mobile.db.AerisysDatabase
 import fr.aerisys.mobile.model.CameraBean
 import fr.aerisys.mobile.model.toCameraBean
 import fraerisysmobile.db.Cameras
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class CameraViewModel(
-    private val database: AerisysDatabase
+    private val database: AerisysDatabase,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
     val camerasList = MutableStateFlow(emptyList<CameraBean>())
     val runInProgress = MutableStateFlow(false)
@@ -122,41 +126,79 @@ class CameraViewModel(
         )
     }
 
-    fun addCamera(newCamera: CameraBean) {
-        val camerasQueries = database.camerasQueries
-        camerasQueries.insertCamera(
-            user_id = newCamera.userId,
-            name = newCamera.name,
-            mac_address = newCamera.macAddress,
-            ip_address = newCamera.ipAddress,
-            image_format = newCamera.imageFormat,
-            image_quality = newCamera.imageQuality,
-            image_dimension = newCamera.imageDimension,
-            firmware_version = newCamera.firmwareVersion,
-            firmware_last_update = newCamera.firmwareLastUpdate
-        )
+    fun addCamera(newCamera: CameraBean): Job {
+        return viewModelScope.launch(ioDispatcher) {
+            try {
+                val camerasQueries = database.camerasQueries
+                val rowUpdated = camerasQueries.insertCamera(
+                    user_id = newCamera.userId,
+                    name = newCamera.name,
+                    mac_address = newCamera.macAddress,
+                    ip_address = newCamera.ipAddress,
+                    image_format = newCamera.imageFormat,
+                    image_quality = newCamera.imageQuality,
+                    image_dimension = newCamera.imageDimension,
+                    firmware_version = newCamera.firmwareVersion,
+                    firmware_last_update = newCamera.firmwareLastUpdate
+                )
 
-        addCameraForm.value = CameraBean() // Reset form
+                println("Added camera: $newCamera")
+                println("Row added: $rowUpdated")
+
+                val rows = if (newCamera.userId != null) {
+                    database.camerasQueries.selectCamerasByUserId(newCamera.userId).executeAsList()
+                } else {
+                    database.camerasQueries.selectAllCameras().executeAsList()
+                }
+                camerasList.value = rows.map { it.toCameraBean() }
+            } catch (e: Exception) {
+                errorMessage.value = "Error adding camera: ${e.message}"
+            } finally {
+                // Reset form sur le thread courant (StateFlow thread-safe)
+                addCameraForm.value = CameraBean()
+            }
+        }
     }
 
-    fun load(userId: Long? = null): Job = viewModelScope.launch {
+    fun load(userId: Long? = null): Job = viewModelScope.launch(ioDispatcher) {
         runInProgress.value = true
         errorMessage.value = ""
 
         try {
             val camerasQueries = database.camerasQueries
 
-            var cameras: List<Cameras>
-            cameras = if (userId != null) {
+            val rows = if (userId != null) {
                 camerasQueries.selectCamerasByUserId(userId).executeAsList()
             } else {
                 camerasQueries.selectAllCameras().executeAsList()
             }
-            camerasList.value = cameras.map { it.toCameraBean() }
+            camerasList.value = rows.map { it.toCameraBean() }
+
+            println("Loaded cameras for userId=$userId: ${camerasList.value.size} cameras found")
         } catch (e: Exception) {
             errorMessage.value = "Error loading cameras: ${e.message}"
         } finally {
             runInProgress.value = false
+        }
+    }
+
+    fun deleteCamera(cameraBean: CameraBean): Job {
+        return viewModelScope.launch(ioDispatcher) {
+            try {
+                val id = cameraBean.id
+                if (id != null) {
+                    database.camerasQueries.deleteCameraById(id)
+                }
+
+                val rows = if (cameraBean.userId != null) {
+                    database.camerasQueries.selectCamerasByUserId(cameraBean.userId).executeAsList()
+                } else {
+                    database.camerasQueries.selectAllCameras().executeAsList()
+                }
+                camerasList.value = rows.map { it.toCameraBean() }
+            } catch (e: Exception) {
+                errorMessage.value = "Error deleting camera: ${e.message}"
+            }
         }
     }
 }

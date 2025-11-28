@@ -1,6 +1,7 @@
 package fr.aerisys.mobile.ui
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
@@ -60,18 +61,23 @@ fun AppNavigation(modifier: Modifier = Modifier) {
         }
         composable<Routes.CameraDetailsRoute> {
             val cameraRoute = it.toRoute<Routes.CameraDetailsRoute>()
-            if (cameraRoute.id == null) {
-                return@composable
-            }
             val cameraBean = cameraViewModel.camerasList.collectAsStateWithLifecycle()
-                .value.first { w -> w.id == cameraRoute.id }
-            CameraDetailsScreen(
-                cameraBean = cameraBean,
-                navController = navHostController,
-                onNavigateBack = {
+                .value.firstOrNull() { w -> w.id == cameraRoute.id }
+
+            if (cameraBean == null) {
+                LaunchedEffect(cameraRoute.id) {
+                    // popBackStack en effet (évite side-effects pendant la composition)
                     navHostController.popBackStack()
                 }
-            )
+            } else {
+                CameraDetailsScreen(
+                    cameraBean = cameraBean,
+                    navController = navHostController,
+                    onNavigateBack = {
+                        navHostController.popBackStack()
+                    }
+                )
+            }
         }
         composable<Routes.AddCameraRoute> {
             AddCameraScreen(
@@ -82,16 +88,19 @@ fun AppNavigation(modifier: Modifier = Modifier) {
         }
         composable<Routes.CameraStreamRoute> {
             val cameraRoute = it.toRoute<Routes.CameraStreamRoute>()
-            if (cameraRoute.id == null) {
-                return@composable
-            }
             val cameraBean = cameraViewModel.camerasList.collectAsStateWithLifecycle()
-                .value.first { w -> w.id == cameraRoute.id }
-
-            CameraStreamScreen(
-                cameraBean = cameraBean,
-                navHostController = navHostController
-            )
+                .value.firstOrNull() { w -> w.id == cameraRoute.id }
+            if (cameraBean == null) {
+                LaunchedEffect(cameraRoute.id) {
+                    // popBackStack en effet (évite side-effects pendant la composition)
+                    navHostController.popBackStack()
+                }
+            } else {
+                CameraStreamScreen(
+                    cameraBean = cameraBean,
+                    navHostController = navHostController
+                )
+            }
         }
         composable<Routes.CameraListRoute> {
             CameraListScreen(

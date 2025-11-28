@@ -21,6 +21,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -45,7 +46,11 @@ fun CameraListScreen(
     val isLoading by viewModel.runInProgress.collectAsState()
     val errorMessage by viewModel.errorMessage.collectAsState()
 
-    viewModel.load(userViewModel.state.value.existingUser?.id)
+    val uid = userViewModel.state.value.existingUser?.id
+
+    LaunchedEffect(uid) {
+        viewModel.load(uid)
+    }
 
     Scaffold(
         floatingActionButton = {
