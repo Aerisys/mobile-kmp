@@ -68,18 +68,7 @@ fun PlatformMapTrue(
 
     // 1. Charger la position du pilote de manière asynchrone (pour le premier centre)
     LaunchedEffect(Unit) {
-        try {
-            val location: Location? = fusedLocationClient.lastLocation.await()
-            if (location != null) {
-                // Utiliser la position du pilote si disponible
-                initialCameraCoordonnees = Coordonnees(location.latitude, location.longitude)
-            } else {
-                // Sinon, utiliser la position du drone
-                initialCameraCoordonnees = positionDrone
-            }
-        } catch (e: SecurityException) {
-            initialCameraCoordonnees = positionDrone
-        }
+        initialCameraCoordonnees = positionDrone
     }
 
     // Afficher l'état de chargement
