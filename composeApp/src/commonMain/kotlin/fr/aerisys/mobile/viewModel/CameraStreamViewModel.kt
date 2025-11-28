@@ -24,7 +24,13 @@ class CameraStreamViewModel(
     private val _error = MutableStateFlow<String?>(null)
     val error = _error.asStateFlow()
 
-    suspend fun startStream(ipAddress: String) {
+    suspend fun startStream(ipAddress: String?) {
+        _error.value = null
+        if (ipAddress == null) {
+            _error.value = "Adresse IP de la caméra invalide"
+            return
+        }
+
         println("MJPEG: startStream called with ipAddress=$ipAddress")
         viewModelScope.launch {
             try {

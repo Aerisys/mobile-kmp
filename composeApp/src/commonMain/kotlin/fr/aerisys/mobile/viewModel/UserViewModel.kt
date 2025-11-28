@@ -4,6 +4,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import fr.aerisys.mobile.db.AerisysDatabase
+import fr.aerisys.mobile.model.UserBean
 import fr.aerisys.mobile.utils.Hashing
 import fraerisysmobile.db.Users
 
@@ -12,6 +13,7 @@ data class AccountState(
     val emailChecked: Boolean = false,
     val existingUser: Users? = null
 )
+
 class UserViewModel(
     private val database: AerisysDatabase
 ) : ViewModel() {

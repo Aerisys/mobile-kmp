@@ -42,9 +42,9 @@ fun CameraStreamScreen(
 ) {
     val cameraStreamViewModel = koinViewModel<CameraStreamViewModel>()
 
-    LaunchedEffect(cameraBean.ip_address) {
-        println("MJPEG: CameraStreamScreen LaunchedEffect for ${cameraBean.ip_address}")
-        cameraStreamViewModel.startStream(cameraBean.ip_address)
+    LaunchedEffect(cameraBean.ipAddress) {
+        println("MJPEG: CameraStreamScreen LaunchedEffect for ${cameraBean.ipAddress}")
+        cameraStreamViewModel.startStream(cameraBean.ipAddress)
     }
 
     val frame by cameraStreamViewModel.frame.collectAsState()

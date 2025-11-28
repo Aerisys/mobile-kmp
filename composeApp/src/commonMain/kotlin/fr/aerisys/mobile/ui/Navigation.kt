@@ -25,10 +25,10 @@ class Routes {
     data object CameraListRoute
 
     @Serializable
-    data class CameraStreamRoute(val id: Long)
+    data class CameraStreamRoute(val id: Long?)
 
     @Serializable
-    data class CameraDetailsRoute(val id: Long)
+    data class CameraDetailsRoute(val id: Long?)
 
     @Serializable
     data object AccountRoute
@@ -60,6 +60,9 @@ fun AppNavigation(modifier: Modifier = Modifier) {
         }
         composable<Routes.CameraDetailsRoute> {
             val cameraRoute = it.toRoute<Routes.CameraDetailsRoute>()
+            if (cameraRoute.id == null) {
+                return@composable
+            }
             val cameraBean = cameraViewModel.camerasList.collectAsStateWithLifecycle()
                 .value.first { w -> w.id == cameraRoute.id }
             CameraDetailsScreen(
@@ -79,8 +82,12 @@ fun AppNavigation(modifier: Modifier = Modifier) {
         }
         composable<Routes.CameraStreamRoute> {
             val cameraRoute = it.toRoute<Routes.CameraStreamRoute>()
+            if (cameraRoute.id == null) {
+                return@composable
+            }
             val cameraBean = cameraViewModel.camerasList.collectAsStateWithLifecycle()
                 .value.first { w -> w.id == cameraRoute.id }
+
             CameraStreamScreen(
                 cameraBean = cameraBean,
                 navHostController = navHostController

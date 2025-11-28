@@ -2,34 +2,24 @@ package fr.aerisys.mobile.ui.screens
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowLeft
 import androidx.compose.material.icons.automirrored.filled.Forward
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowLeft
-import androidx.compose.material.icons.filled.Forward
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -39,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import fr.aerisys.mobile.ui.Routes
 import fr.aerisys.mobile.viewModel.CameraViewModel
+import fr.aerisys.mobile.viewModel.UserViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,10 +39,13 @@ fun CameraListScreen(
     navController: NavController,
 ) {
     val viewModel = koinViewModel<CameraViewModel>()
+    val userViewModel = koinViewModel<UserViewModel>()
 
     val cameras by viewModel.camerasList.collectAsState()
     val isLoading by viewModel.runInProgress.collectAsState()
     val errorMessage by viewModel.errorMessage.collectAsState()
+
+    viewModel.load(userViewModel.state.value.existingUser?.id)
 
     Scaffold(
         floatingActionButton = {
@@ -83,6 +77,11 @@ fun CameraListScreen(
                     text = errorMessage,
                     color = MaterialTheme.colorScheme.error
                 )
+            } else if( cameras.isEmpty()) {
+                Text(
+                    text = "No cameras available. Please add a camera.",
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                )
             } else {
                 LazyColumn(
                     verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -111,9 +110,9 @@ fun CameraListScreen(
                                         " ${camera.name}",
                                         style = MaterialTheme.typography.titleMedium
                                     )
-                                    Text("IP: ${camera.ip_address}")
-                                    Text("Format: ${camera.image_format}")
-                                    Text("Quality: ${camera.image_quality}")
+                                    Text("IP: ${camera.ipAddress}")
+                                    Text("Format: ${camera.imageFormat}")
+                                    Text("Quality: ${camera.imageQuality}")
                                 }
                                 Icon(
                                     modifier = Modifier.padding(horizontal = 8.dp),

@@ -38,7 +38,7 @@ val viewModelModule = module {
 
     viewModelOf(::MainViewModel)
     single {
-        CameraViewModel()
+        CameraViewModel(get())
     }
     single {
         UserViewModel(get())

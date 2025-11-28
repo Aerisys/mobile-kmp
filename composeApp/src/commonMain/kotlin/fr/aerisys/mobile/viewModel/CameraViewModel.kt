@@ -2,15 +2,21 @@ package fr.aerisys.mobile.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import fr.aerisys.mobile.db.AerisysDatabase
 import fr.aerisys.mobile.model.CameraBean
+import fr.aerisys.mobile.model.toCameraBean
+import fraerisysmobile.db.Cameras
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
-class CameraViewModel() : ViewModel() {
+class CameraViewModel(
+    private val database: AerisysDatabase
+) : ViewModel() {
     val camerasList = MutableStateFlow(emptyList<CameraBean>())
     val runInProgress = MutableStateFlow(false)
     val errorMessage = MutableStateFlow("")
+    val addCameraForm = MutableStateFlow(CameraBean())
 
     fun loadFakeData(runInProgress: Boolean = false, errorMessage: String = "") {
         this.runInProgress.value = runInProgress
@@ -20,128 +26,133 @@ class CameraViewModel() : ViewModel() {
             CameraBean(
                 id = 1,
                 name = "Test Camera 1",
-                user_id = 1001,
-                ip_address = "192.168.1.61/stream",
-                mac_address = "00:1A:2B:3C:4D:6E",
-                image_format = "JPEG",
-                image_quality = "High",
-                image_dimension = "1920x1080",
-                firmware_version = "v1.0.0",
-                firmware_last_update = 1622505600
+                userId = 1001L,
+                ipAddress = "192.168.1.61/stream",
+                macAddress = "00:1A:2B:3C:4D:6E",
+                imageFormat = "JPEG",
+                imageQuality = "High",
+                imageDimension = "1920x1080",
+                firmwareVersion = "v1.0.0",
+                firmwareLastUpdate = 1622505600
             ),
             CameraBean(
                 id = 2,
                 name = "Kitchen",
-                user_id = 102,
-                ip_address = "192.168.1.11",
-                mac_address = "00:1A:2B:3C:4D:5F",
-                image_format = "PNG",
-                image_quality = "Medium",
-                image_dimension = "1280x720",
-                firmware_version = "v1.1.5",
-                firmware_last_update = 1706745600
+                userId = 102,
+                ipAddress = "192.168.1.11",
+                macAddress = "00:1A:2B:3C:4D:5F",
+                imageFormat = "PNG",
+                imageQuality = "Medium",
+                imageDimension = "1280x720",
+                firmwareVersion = "v1.1.5",
+                firmwareLastUpdate = 1706745600
             ),
             CameraBean(
                 id = 3,
                 name = "Living Room",
-                user_id = 103,
-                ip_address = "192.168.1.12",
-                mac_address = "00:1A:2B:3C:4D:60",
-                image_format = "JPEG",
-                image_quality = "Low",
-                image_dimension = "640x480",
-                firmware_version = "v1.0.9",
-                firmware_last_update = 1709251200
+                userId = 103,
+                ipAddress = "192.168.1.12",
+                macAddress = "00:1A:2B:3C:4D:60",
+                imageFormat = "JPEG",
+                imageQuality = "Low",
+                imageDimension = "640x480",
+                firmwareVersion = "v1.0.9",
+                firmwareLastUpdate = 1709251200
             ),
             CameraBean(
                 id = 4,
                 name = "Grandma's House",
-                user_id = 104,
-                ip_address = "192.168.1.13",
-                mac_address = "00:1A:2B:3C:4D:61",
-                image_format = "BMP",
-                image_quality = "High",
-                image_dimension = "2560x1440",
-                firmware_version = "v1.3.1",
-                firmware_last_update = 1711929600
+                userId = 104,
+                ipAddress = "192.168.1.13",
+                macAddress = "00:1A:2B:3C:4D:61",
+                imageFormat = "BMP",
+                imageQuality = "High",
+                imageDimension = "2560x1440",
+                firmwareVersion = "v1.3.1",
+                firmwareLastUpdate = 1711929600
             ),
             CameraBean(
                 id = 5,
                 name = "Gate cam",
-                user_id = 105,
-                ip_address = "192.168.1.14",
-                mac_address = "00:1A:2B:3C:4D:62",
-                image_format = "JPEG",
-                image_quality = "Very High",
-                image_dimension = "3840x2160",
-                firmware_version = "v2.0.0",
-                firmware_last_update = 1714521600
+                userId = 105,
+                ipAddress = "192.168.1.14",
+                macAddress = "00:1A:2B:3C:4D:62",
+                imageFormat = "JPEG",
+                imageQuality = "Very High",
+                imageDimension = "3840x2160",
+                firmwareVersion = "v2.0.0",
+                firmwareLastUpdate = 1714521600
             ),
             CameraBean(
                 id = 6,
                 name = "Lilibet",
-                user_id = 106,
-                ip_address = "192.168.1.15",
-                mac_address = "00:1A:2B:3C:4D:63",
-                image_format = "TIFF",
-                image_quality = "Ultra",
-                image_dimension = "7680x4320",
-                firmware_version = "v2.1.3",
-                firmware_last_update = 1717200000
+                userId = 106,
+                ipAddress = "192.168.1.15",
+                macAddress = "00:1A:2B:3C:4D:63",
+                imageFormat = "TIFF",
+                imageQuality = "Ultra",
+                imageDimension = "7680x4320",
+                firmwareVersion = "v2.1.3",
+                firmwareLastUpdate = 1717200000
             ),
             CameraBean(
                 id = 7,
                 name = "Security cam",
-                user_id = 106,
-                ip_address = "192.168.1.15",
-                mac_address = "00:1A:2B:3C:4D:63",
-                image_format = "TIFF",
-                image_quality = "Ultra",
-                image_dimension = "7680x4320",
-                firmware_version = "v2.1.3",
-                firmware_last_update = 1717200000
+                userId = 106,
+                ipAddress = "192.168.1.15",
+                macAddress = "00:1A:2B:3C:4D:63",
+                imageFormat = "TIFF",
+                imageQuality = "Ultra",
+                imageDimension = "7680x4320",
+                firmwareVersion = "v2.1.3",
+                firmwareLastUpdate = 1717200000
             ),
             CameraBean(
                 id = 8,
                 name = "Philibert",
-                user_id = 106,
-                ip_address = "192.168.1.15",
-                mac_address = "00:1A:2B:3C:4D:63",
-                image_format = "TIFF",
-                image_quality = "Ultra",
-                image_dimension = "7680x4320",
-                firmware_version = "v2.1.3",
-                firmware_last_update = 1717200000
+                userId = 106,
+                ipAddress = "192.168.1.15",
+                macAddress = "00:1A:2B:3C:4D:63",
+                imageFormat = "TIFF",
+                imageQuality = "Ultra",
+                imageDimension = "7680x4320",
+                firmwareVersion = "v2.1.3",
+                firmwareLastUpdate = 1717200000
             )
         )
     }
 
-    init {
-        loadFakeData(runInProgress = false)
-    }
-
     fun addCamera(newCamera: CameraBean) {
-        val currentList = camerasList.value.toMutableList()
-        currentList.add(newCamera)
-        camerasList.value = currentList
+        val camerasQueries = database.camerasQueries
+        camerasQueries.insertCamera(
+            user_id = newCamera.userId,
+            name = newCamera.name,
+            mac_address = newCamera.macAddress,
+            ip_address = newCamera.ipAddress,
+            image_format = newCamera.imageFormat,
+            image_quality = newCamera.imageQuality,
+            image_dimension = newCamera.imageDimension,
+            firmware_version = newCamera.firmwareVersion,
+            firmware_last_update = newCamera.firmwareLastUpdate
+        )
+
+        addCameraForm.value = CameraBean() // Reset form
     }
 
-    fun load(name: String = ""): Job = viewModelScope.launch {
+    fun load(userId: Long? = null): Job = viewModelScope.launch {
         runInProgress.value = true
         errorMessage.value = ""
 
         try {
-            camerasList.value = if (name.isBlank()) {
-                camerasList.value // Keep current list
-            } else {
-                camerasList.value.filter {
-                    it.name.contains(name, ignoreCase = true)
-                }
-            }
+            val camerasQueries = database.camerasQueries
 
-            if (camerasList.value.isEmpty()) {
-                errorMessage.value = "No camera found with the name \"$name\""
+            var cameras: List<Cameras>
+            cameras = if (userId != null) {
+                camerasQueries.selectCamerasByUserId(userId).executeAsList()
+            } else {
+                camerasQueries.selectAllCameras().executeAsList()
             }
+            camerasList.value = cameras.map { it.toCameraBean() }
         } catch (e: Exception) {
             errorMessage.value = "Error loading cameras: ${e.message}"
         } finally {

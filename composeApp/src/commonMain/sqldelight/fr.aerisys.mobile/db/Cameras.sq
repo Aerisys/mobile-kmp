@@ -3,7 +3,8 @@
 -- =====================
 CREATE TABLE cameras (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER NOT NULL REFERENCES users(id), -- Clé étrangère
+    user_id INTEGER REFERENCES users(id), -- Clé étrangère
+    name TEXT,
     ip_address TEXT,
     mac_address TEXT,
     image_format TEXT,
@@ -23,9 +24,10 @@ INSERT INTO cameras (
     image_quality,
     image_dimension,
     firmware_version,
-    firmware_last_update
+    firmware_last_update,
+    name
 )
-VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
 
 -- 🔹 READ
 selectAllCameras:
@@ -48,7 +50,8 @@ SET ip_address = ?,
     image_quality = ?,
     image_dimension = ?,
     firmware_version = ?,
-    firmware_last_update = ?
+    firmware_last_update = ?,
+    name = ?
 WHERE id = ?;
 
 -- 🔹 DELETE

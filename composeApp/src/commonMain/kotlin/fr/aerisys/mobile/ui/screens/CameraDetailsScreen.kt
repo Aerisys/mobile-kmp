@@ -64,9 +64,12 @@ fun CameraDetailsScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
 
-            DetailItem(label = "IP Address", value = cameraBean.ip_address)
-            DetailItem(label = "Image Format", value = cameraBean.image_format)
-            DetailItem(label = "Quality", value = cameraBean.image_quality)
+            DetailItem(label = "IP Address", value = cameraBean.ipAddress)
+            DetailItem(label = "Image Format", value = cameraBean.imageFormat)
+            DetailItem(label = "Quality", value = cameraBean.imageQuality)
+            if (cameraBean.userId != null) {
+                DetailItem(label = "User ID", value = cameraBean.userId.toString())
+            }
 
             Spacer(modifier = Modifier.height(48.dp))
 
@@ -83,7 +86,7 @@ fun CameraDetailsScreen(
 }
 
 @Composable
-private fun DetailItem(label: String, value: String) {
+private fun DetailItem(label: String, value: String?) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -91,7 +94,11 @@ private fun DetailItem(label: String, value: String) {
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(label, style = MaterialTheme.typography.titleMedium)
-        Text(value, style = MaterialTheme.typography.bodyLarge)
+        if (value == null) {
+            Text("N/A", style = MaterialTheme.typography.bodyLarge)
+        } else {
+            Text(value, style = MaterialTheme.typography.bodyLarge)
+        }
     }
     HorizontalDivider()
 }

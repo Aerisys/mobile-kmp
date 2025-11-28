@@ -80,6 +80,7 @@ sqldelight {
     databases {
         create("AerisysDatabase") {
             packageName.set("fr.aerisys.mobile.db")
+            version = 3
         }
     }
 }

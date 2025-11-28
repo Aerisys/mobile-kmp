@@ -1,17 +1,39 @@
 package fr.aerisys.mobile.model
 
+import kotlin.random.Random
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
+
 data class CameraBean(
-    val id: Long,
-    val user_id: Long,
-    val name: String,
-    val mac_address: String,
-    val ip_address: String,
-    val image_format: String,
-    val image_quality: String,
-    val image_dimension: String,
-    val firmware_version: String,
-    val firmware_last_update: Int, // timestamp
-)
+    val id: Long?,
+    val userId: Long?,
+    val name: String?,
+    var macAddress: String?,
+    var ipAddress: String?,
+    val imageFormat: String?,
+    val imageQuality: String?,
+    var imageDimension: String?,
+    val firmwareVersion: String?,
+    val firmwareLastUpdate: Long?, // timestamp
+) {
+    @OptIn(ExperimentalTime::class)
+    constructor() : this(
+        null,
+        null,
+        "",
+        "MAC-${
+            Random.nextInt(
+                1000,
+                9999
+            )}",
+        "",
+        "JPEG",
+        "30",
+        "640x480",
+        "1.0.0",
+        Clock.System.now().toEpochMilliseconds() / 1000
+    )
+}
 
 data class DroneBean(
     val id: Long,
@@ -33,5 +55,5 @@ data class UserBean(
     val userName: String,
     val email: String,
     val password: String,
-    val createdAt: Long,
+    val createdAt: Long
 )

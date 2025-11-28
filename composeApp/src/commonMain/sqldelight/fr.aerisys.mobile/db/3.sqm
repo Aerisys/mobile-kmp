@@ -1,0 +1,25 @@
+BEGIN TRANSACTION;
+
+-- 1) créer la nouvelle table (user_id sans NOT NULL)
+CREATE TABLE cameras_new (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER REFERENCES users(id),
+    name TEXT,
+    ip_address TEXT,
+    mac_address TEXT,
+    image_format TEXT,
+    image_quality TEXT,
+    image_dimension TEXT,
+    firmware_version TEXT,
+    firmware_last_update INTEGER
+);
+
+-- 2) copier les données depuis l'ancienne table
+INSERT INTO cameras_new (id, user_id, name, ip_address, mac_address, image_format, image_quality, image_dimension, firmware_version, firmware_last_update)
+SELECT id, user_id, name, ip_address, mac_address, image_format, image_quality, image_dimension, firmware_version, firmware_last_update FROM cameras;
+
+-- 3) supprimer l'ancienne table et renommer la nouvelle
+DROP TABLE cameras;
+ALTER TABLE cameras_new RENAME TO cameras;
+
+COMMIT;

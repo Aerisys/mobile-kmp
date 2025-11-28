@@ -1,0 +1,29 @@
+ALTER TABLE cameras ADD COLUMN name TEXT;
+
+-- UPDATE (mettre à jour la requête pour inclure la colonne name)
+updateCamera:
+UPDATE cameras
+SET ip_address = ?,
+    mac_address = ?,
+    image_format = ?,
+    image_quality = ?,
+    image_dimension = ?,
+    firmware_version = ?,
+    firmware_last_update = ?,
+    name = ?
+WHERE id = ?;
+
+-- INSERT (nouvelle signature avec name)
+insertCamera:
+INSERT INTO cameras (
+    user_id,
+    name,
+    ip_address,
+    mac_address,
+    image_format,
+    image_quality,
+    image_dimension,
+    firmware_version,
+    firmware_last_update
+)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
